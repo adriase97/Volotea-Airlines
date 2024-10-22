@@ -1,0 +1,83 @@
+﻿@using TiendaOnline.Enums
+
+@model TiendaOnline.ViewModels.ProductosViewModel
+@{
+    ViewBag.Title = TiendaOnline.Properties.Resources.Productos;
+}
+
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <h2 class="section-title">@TiendaOnline.Properties.Resources.Productos</h2>
+    </div>
+
+    <div class="col-lg-6 d-flex justify-content-center mb-3">
+        <a href="@Url.Action("AddProducto", "Producto")" class="btn btn-success btn-lg">@TiendaOnline.Properties.Resources.Anadir</a>
+    </div>
+
+    <div class="col-lg-6">
+        @using (Html.BeginForm("Index", "Producto", FormMethod.Get))
+        {
+            <div class="input-group">
+                @Html.DropDownList(
+                         "idTipoProducto",
+                         new SelectList(Model.TipoProductos, "IdTipoProducto", "Nombre"),
+                         TiendaOnline.Properties.Resources.SeleccionaTipoProducto,
+                         new { @class = "form-control", @onchange = "this.form.submit();" }
+                         )
+            </div>
+        }
+    </div>
+
+    @foreach (ProductoModel producto in Model.Productos)
+    {
+        <div class="col-lg-4 col-md-6 col-sm-12 @(producto.Stock > 0 ? "product" : "productexhausted")" style="margin-top: 10px;">
+            @if (producto.Stock == 0)
+            {
+                <div class="out-of-stock-label">@TiendaOnline.Properties.Resources.Agotado</div>
+            }
+            <div class="row">
+                <div class="col-lg-12">
+                    <img src="@producto.Imagen" alt="Alternate Text" height="300px" width="100%" />
+                </div>
+
+                <div class="col-lg-9">
+                    <h3>@producto.Nombre</h3>
+                </div>
+                <div class="col-lg-3 text-end">
+                    <h4>@producto.Precio @TiendaOnline.Properties.Resources.Moneda</h4>
+                </div>
+                <div class="col-lg-3">
+                    <div class="row">
+                        @foreach (string talla in producto.Tallas.Split(','))
+                        {
+                            <div class="col-lg-2 col-md-3 col-sm-4">
+                                <h6>@talla</h6>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-lg-9 text-end">
+                    @foreach (string color in producto.Color.Split(','))
+                    {
+                        <div class="circle" style="background-color:@color"></div>
+                    }
+                </div>
+                <div class="col-lg-6">
+                    <h6>@producto.TipoProducto.Nombre</h6>
+                </div>
+                <div class="col-lg-6 text-end">
+                    <h6>@producto.Stock</h6>
+                </div>
+                <div class="col-lg-12">
+                    <p>@producto.Descripcion</p>
+                </div>
+                <div class="col-lg-6">
+                    <a href="@Url.Action("UpdateProducto", "Producto", new { IdProducto = producto.IdProducto })" class="btn btn-primary">@TiendaOnline.Properties.Resources.Editar</a>
+                </div>
+                <div class="col-lg-6 text-end">
+                    <a href="@Url.Action("DeleteProducto", "Producto", new { IdProducto = producto.IdProducto })" class="btn btn-danger">@TiendaOnline.Properties.Resources.Eliminar</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

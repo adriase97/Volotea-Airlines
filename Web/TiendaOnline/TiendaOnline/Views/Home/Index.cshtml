@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="text-section">
+            <h3>Resumen de la Aplicación Tienda Online</h3>
+            <p>La aplicación <b>Tienda Online</b> es una plataforma de gestión de productos que permite a los usuarios realizar las siguientes acciones:</p>
+
+            <h4>Visualización de Productos</h4>
+            <p>
+                - La aplicación presenta una lista de productos disponibles, mostrando información relevante como el nombre, precio, imagen, descripción, tallas, colores y stock disponible.<br />
+                - Los productos que están fuera de stock se marcan claramente para evitar confusiones.
+            </p>
+
+            <h4>Filtrado de Productos</h4>
+            <p>
+                - Los usuarios pueden filtrar la lista de productos por tipo utilizando un menú desplegable. Este filtrado se realiza mediante un formulario que envía la selección al controlador, permitiendo una experiencia de navegación más personalizada.
+            </p>
+
+            <h4>Gestión de Productos</h4>
+            <p>
+                - La aplicación permite a los usuarios <b>agregar</b> nuevos productos mediante un formulario que solicita información como nombre, precio, descripción, imagen, tallas disponibles, colores y cantidad de stock.<br />
+                - Los usuarios pueden <b>editar</b> productos existentes, lo que les permite actualizar la información y la imagen del producto.<br />
+                - Además, hay opción para <b>eliminar</b> productos, asegurando que solo los artículos deseados permanezcan en la tienda.
+            </p>
+
+            <h4>Interfaz Amigable</h4>
+            <p>
+                - La interfaz utiliza un diseño responsivo y moderno, con botones de acción claros para facilitar la navegación entre las distintas funcionalidades, como agregar, editar o eliminar productos.<br />
+                - Se incluye una vista previa de la imagen seleccionada al agregar o editar productos, mejorando la experiencia del usuario al permitir una visualización instantánea.
+            </p>
+
+            <h4>Recursos Localizados</h4>
+            <p>- La aplicación está equipada con recursos localizados, lo que permite la personalización de textos en diferentes idiomas. Esto mejora la accesibilidad y usabilidad para un público más amplio.</p>
+
+            <h4>Validaciones y Mensajes de Error</h4>
+            <p>- Se incluyen validaciones en el formulario para asegurar que los usuarios proporcionen la información necesaria antes de enviar, lo que ayuda a prevenir errores en la entrada de datos.</p>
+
+            <h4>Motivos por los cuales no implementé ciertas funcionalidades**</h4>
+            <p>
+                Durante el desarrollo de este proyecto, había varias funcionalidades que planeaba implementar pero que finalmente no fueron desarrolladas. A continuación, detallo cada una de ellas junto con las razones por las que no se llevaron a cabo:
+
+                1. <b>Soporte Multilingüe</b>
+                Inicialmente, quise agregar la opción de diferentes idiomas para mejorar la experiencia del usuario, adaptando la aplicación a diversos públicos. Sin embargo, no logré encontrar una solución que me satisfaciera por completo en términos de simplicidad y escalabilidad. A pesar de esto, dejé los ficheros de idioma creados para una futura implementación más adecuada, dejando el proyecto abierto a la inclusión de nuevos lenguajes.
+
+                2. <b>Imágenes</b>
+                No implementé la funcionalidad de almacenar imágenes de productos porque actualmente no tengo un servidor disponible para alojarlas. Decidí utilizar una imagen por defecto como recurso temporal, lo cual me permitió avanzar en otras áreas más prioritarias. Esto también simplifica la migración futura cuando se disponga de un servidor o un servicio externo para gestionar las imágenes.
+
+                3. <b>Cambio de Moneda</b>
+                Consideré implementar un sistema de cambio de moneda, donde la moneda se ajustaría según el idioma seleccionado por el usuario. No llegué a incluir esta funcionalidad porque no logré integrar un sistema adecuado de manera eficiente en el tiempo disponible. No obstante, dejo esta característica como un futuro desarrollo que puede mejorar la experiencia del usuario según su localización geográfica.
+
+                4. <b>Tallas y Tipos de Producto</b>
+                Decidí crear un `enum` para gestionar las tallas, ya que no consideré necesario generar una tabla con relaciones de muchos a muchos. Esta decisión me permitió simplificar el desarrollo de la base de datos y reducir el tiempo de implementación sin afectar la funcionalidad del sistema. Para los tipos de producto, creé una tabla simple, pero no añadí la opción para agregar nuevos tipos desde la interfaz porque consideré que era una funcionalidad repetitiva. Opté por invertir ese tiempo en otras funcionalidades que consideré de mayor valor para la prueba.
+
+                Estas decisiones fueron tomadas para gestionar mejor el tiempo y concentrar mis esfuerzos en áreas que considero fundamentales para la evaluación de este proyecto. Las funcionalidades que no fueron incluidas pueden desarrollarse en futuras etapas sin dificultades importantes.
+            </p>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="sql-section">
+            <h3>Comandos SQL</h3>
+            <pre>
+CREATE DATABASE TiendaOnline
+
+USE TiendaOnline
+
+CREATE TABLE TipoProducto (
+    IdTipoProducto INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Producto (
+    IdProducto INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(100) NOT NULL,
+    Tallas NVARCHAR(20) NOT NULL,
+    Color NVARCHAR(50) NOT NULL,
+    Precio DECIMAL(18, 2) CHECK (Precio > 0) NOT NULL,
+    Descripcion NVARCHAR(MAX) NOT NULL CHECK (LEN(Descripcion) >= 10),
+    Imagen NVARCHAR(MAX) NOT NULL,
+    Stock INT CHECK (Stock >= 0) NOT NULL,
+    IdTipoProducto INT NOT NULL,
+
+    CONSTRAINT FK_Producto_TipoProducto FOREIGN KEY (IdTipoProducto) 
+    REFERENCES TipoProducto (IdTipoProducto)
+);
+
+INSERT INTO TipoProducto (Nombre) VALUES ('Camisas');
+INSERT INTO TipoProducto (Nombre) VALUES ('Sudaderas');
+INSERT INTO TipoProducto (Nombre) VALUES ('Pantalones');
+INSERT INTO TipoProducto (Nombre) VALUES ('Chaquetas');
+            </pre>
+        </div>
+    </div>
+</div>

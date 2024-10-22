@@ -1,0 +1,99 @@
+﻿@using TiendaOnline.Enums
+@model TiendaOnline.ViewModels.ProductoViewModel
+
+@{
+    ViewBag.Title = TiendaOnline.Properties.Resources.CrearProducto;
+}
+
+<h2>@TiendaOnline.Properties.Resources.CrearProducto</h2>
+
+@using (Html.BeginForm("CreateProducto", "Producto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "custom-error-message" })
+
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <div class="form-group">
+                <label>@TiendaOnline.Properties.Resources.SeleccionarImagen</label>
+                <input type="file" id="imageInput" name="Imagen" class="form-control" accept="image/*" />
+                <img id="imagePreview" src="#" alt="Vista previa de la imagen" height="300px" width="100%" style="display:none;" />
+                @Html.ValidationMessageFor(m => m.Producto.Imagen, "", new { @class = "text-danger" })
+            </div>
+
+            <section Scripts>
+                <script>
+                    const imageInput = document.getElementById('imageInput');
+                    const imagePreview = document.getElementById('imagePreview');
+
+                    imageInput.onchange = function (event) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                imagePreview.src = e.target.result;
+                                imagePreview.style.display = 'block';
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    };
+                </script>
+            </section>
+        </div>
+
+        <div class="col-lg-6 col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Producto.Nombre)
+                @Html.TextBoxFor(m => m.Producto.Nombre, new { @class = "form-control", placeholder = TiendaOnline.Properties.Resources.IntroduceNombre })
+                @Html.ValidationMessageFor(m => m.Producto.Nombre, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Producto.Precio)
+                @Html.TextBoxFor(m => m.Producto.Precio, new { @class = "form-control", placeholder = TiendaOnline.Properties.Resources.IntroducePrecio })
+                @Html.ValidationMessageFor(m => m.Producto.Precio, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Producto.Descripcion)
+                @Html.TextAreaFor(m => m.Producto.Descripcion, new { @class = "form-control", placeholder = TiendaOnline.Properties.Resources.IntroduceDescripcion })
+                @Html.ValidationMessageFor(m => m.Producto.Descripcion, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.Label(TiendaOnline.Properties.Resources.Tallas)
+                @foreach (var talla in Enum.GetValues(typeof(Tallas)).Cast<Tallas>())
+                {
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="Producto.Tallas" value="@talla.ToString()" id="@talla" />
+                        <label class="form-check-label" for="@talla">@talla</label>
+                    </div>
+                }
+                @Html.ValidationMessageFor(m => m.Producto.Tallas, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.Label(TiendaOnline.Properties.Resources.Colores)
+                @Html.TextBoxFor(m => m.Producto.Color, new { @class = "form-control", placeholder = TiendaOnline.Properties.Resources.IntroduceColores })
+                @Html.ValidationMessageFor(m => m.Producto.Color, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Producto.Stock)
+                @Html.TextBoxFor(m => m.Producto.Stock, new { @class = "form-control", placeholder = TiendaOnline.Properties.Resources.IntroduceStock })
+                @Html.ValidationMessageFor(m => m.Producto.Stock, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Producto.TipoProducto)
+                @Html.DropDownListFor(
+                         m => m.Producto.IdTipoProducto,
+                         new SelectList(Model.TipoProductos, "IdTipoProducto", "Nombre"),
+                         TiendaOnline.Properties.Resources.IntroduceTipoProducto,
+                         new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Producto.IdTipoProducto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">@TiendaOnline.Properties.Resources.Anadir</button>
+}

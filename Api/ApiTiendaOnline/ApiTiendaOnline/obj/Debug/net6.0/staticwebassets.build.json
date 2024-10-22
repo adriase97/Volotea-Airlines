@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "ck95lfAQEo4L6ohsE0C3dZXZCvc0ZK8eL4S+vy9KO6A=",
+  "Source": "ApiTiendaOnline",
+  "BasePath": "_content/ApiTiendaOnline",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
